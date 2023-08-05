@@ -1,11 +1,15 @@
 import React from "react";
 import { AppBar, Toolbar, Typography, Button } from "@mui/material";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { UserAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
-const MenuBar = ({ user, setUser }) => {
+const MenuBar = () => {
+  const { user, logOut } = UserAuth();
   const navigate = useNavigate();
-  const handleLogOut = (e) => {
-    setUser({});
+
+  const handleLogOut = () => {
+    logOut();
     navigate("/signin");
   };
 
@@ -16,7 +20,14 @@ const MenuBar = ({ user, setUser }) => {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Products Management
           </Typography>
-          {user.email ? (
+
+          {user?.name && (
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+              Welcome {user.name}
+            </Typography>
+          )}
+
+          {user?.email ? (
             <>
               <Button color="inherit" component={Link} to="/dashboard">
                 Dashboard

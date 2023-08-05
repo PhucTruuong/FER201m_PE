@@ -1,39 +1,49 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
-import jwt_decode from "jwt-decode";
+import { UserAuth } from "../context/AuthContext";
+import { useNavigate, useLocation } from "react-router-dom";
 import "../css/login.css";
 
 const URL =
   "https://64b1f3c9062767bc4826b53c.mockapi.io/api/v1/signinInformation";
 
-const Signin = ({ user, setUser }) => {
-  const [loginData, setLoginData] = useState([]);
+const Signin = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const EM = location.state && location.state.EM;
+
+  // const [loginData, setLoginData] = useState([]);
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate();
 
-  const handleCredentialResponse = (response) => {
-    // console.log("Encoded JWT ID token: " + response.credential);
-    var decoded = jwt_decode(response.credential);
-    setUser(decoded);
-    navigate("/dashboard");
-  };
+  const { user, decodeJWT } = UserAuth();
 
   useEffect(() => {
     /* global google*/
     google.accounts.id.initialize({
       client_id:
         "649922704699-032oqaosppsos2qm66h73rmbgime1h7o.apps.googleusercontent.com",
-      callback: handleCredentialResponse,
+      callback: decodeJWT,
     });
     google.accounts.id.renderButton(
       document.getElementById("buttonDiv"),
       { theme: "outline", size: "large" } // customization attributes
     );
-    google.accounts.id.prompt(); // also display the One Tap dialog
-  }, []);
+    // google.accounts.id.prompt(); // also display the One Tap dialog
+  }, [decodeJWT]);
+
+  useEffect(() => {
+    if (user?.email != null) {
+      toast.dismiss();
+      navigate("/dashboard");
+    }
+  }, [user, navigate]);
+
+  if (EM) {
+    toast.dismiss();
+    toast.error(EM);
+  }
 
   useEffect(() => {
     getLoginData();
@@ -43,7 +53,7 @@ const Signin = ({ user, setUser }) => {
     try {
       const res = await axios.get(URL);
       if (res.status === 200) {
-        setLoginData(res.data);
+        // setLoginData(res.data);
       }
     } catch (error) {
       console.error("Error fetching login data:", error);
@@ -53,9 +63,9 @@ const Signin = ({ user, setUser }) => {
   const handleLogin = (e) => {
     e.preventDefault();
 
-    const user = loginData.find(
-      (user) => user.userName === userName && user.password === password
-    );
+    // const user = loginData.find(
+    //   (user) => user.userName === userName && user.password === password
+    // );
     if (user) {
       navigate("/homepage");
     } else {

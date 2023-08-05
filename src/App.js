@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
@@ -11,40 +11,53 @@ import EditComponents from "./components/EditComponents";
 import Footer from "./components/Footer";
 import TopNew from "./pages/TopNew";
 import Profile from "./pages/Profile";
+import { AuthContextProvider } from "./context/AuthContext";
+import Protected from "./components/Protected";
 
 function App() {
-  const [user, setUser] = useState({});
-
   return (
-    <BrowserRouter>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          minHeight: "100vh",
-          paddingTop: "64px",
-        }}
-      >
-        <MenuBar user={user} setUser={setUser} />
-        <ToastContainer position="top-right" autoClose={2000} />
-        <div style={{ flex: 1 }}>
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route
-              path="/signin"
-              element={<Signin user={user} setUser={setUser} />}
-            />
-            <Route path="/homepage" element={<HomePage />} />
-            <Route path="/topnews" element={<TopNew />} />
-            <Route path="/dashboard" element={<DashBoard />} />
-            <Route path="/profile" element={<Profile user={user} />} />
-            <Route path="/add" element={<EditComponents />} />
-            <Route path="/update/:id" element={<EditComponents />} />
-          </Routes>
+    <AuthContextProvider>
+      <BrowserRouter>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            minHeight: "100vh",
+            paddingTop: "64px",
+          }}
+        >
+          <MenuBar />
+          <ToastContainer position="top-right" autoClose={2000} />
+          <div style={{ flex: 1 }}>
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/signin" element={<Signin />} />
+              <Route path="/homepage" element={<HomePage />} />
+              <Route path="/topnews" element={<TopNew />} />
+              <Route
+                path="/dashboard"
+                element={
+                  <Protected>
+                    <DashBoard />
+                  </Protected>
+                }
+              />
+              <Route
+                path="/profile"
+                element={
+                  <Protected>
+                    <Profile />
+                  </Protected>
+                }
+              />
+              <Route path="/add" element={<EditComponents />} />
+              <Route path="/update/:id" element={<EditComponents />} />
+            </Routes>
+          </div>
+          <Footer />
         </div>
-        <Footer />
-      </div>
-    </BrowserRouter>
+      </BrowserRouter>
+    </AuthContextProvider>
   );
 }
 

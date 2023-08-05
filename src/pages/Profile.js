@@ -1,6 +1,8 @@
 import React from "react";
+import { UserAuth } from "../context/AuthContext";
 
-const Profile = ({ user }) => {
+const Profile = () => {
+  const { user } = UserAuth();
   return (
     <div>
       {user && (
