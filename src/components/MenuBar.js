@@ -1,32 +1,46 @@
 import React from "react";
 import { AppBar, Toolbar, Typography, Button } from "@mui/material";
-import { Link } from "react-router-dom";
-// import Logout from "../pages/Logout";
+import { Link, useNavigate } from "react-router-dom";
 
-const MenuBar = ({ user, handleLogOut}) => {
+const MenuBar = ({ user, setUser }) => {
+  const navigate = useNavigate();
+  const handleLogOut = (e) => {
+    setUser({});
+    navigate("/signin");
+  };
+
   return (
     <div>
-      <AppBar position="static">
+      <AppBar position="fixed">
         <Toolbar>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Products Management
           </Typography>
-          {user ? (
+          {user.email ? (
+            <>
+              <Button color="inherit" component={Link} to="/dashboard">
+                Dashboard
+              </Button>
+              <Button color="inherit" component={Link} to="/profile">
+                Profile
+              </Button>
+              <Button color="inherit" component={Button} onClick={handleLogOut}>
+                Log out
+              </Button>
+            </>
+          ) : (
             <>
               <Button color="inherit" component={Link} to="/homepage">
                 Home
               </Button>
-              <Button color="inherit" component={Link} to="/dashboard">
-                Dashboard
-              </Button>
               <Button color="inherit" component={Link} to="/topnews">
                 Top News
               </Button>
-              {Object.keys(user).length !== 0 && (
-                <button onClick={handleLogOut}>Log out</button>
-              )}
+              <Button color="inherit" component={Link} to="/signin">
+                Sign in
+              </Button>
             </>
-          ) : null}
+          )}
         </Toolbar>
       </AppBar>
     </div>
