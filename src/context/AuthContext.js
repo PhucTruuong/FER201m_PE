@@ -4,6 +4,12 @@ import jwt_decode from "jwt-decode";
 const AuthContext = createContext();
 
 export const AuthContextProvider = ({ children }) => {
+  
+  // const initialUserState = {
+  //   name: "",
+  //   avatar: "",
+  //   email: ""
+  // }
   const [user, setUser] = useState({});
 
   useEffect(() => {
@@ -21,13 +27,18 @@ export const AuthContextProvider = ({ children }) => {
     setUser(decoded);
   };
 
+  const loginWithPassword = (response) => {
+    const {email} = response;
+    setUser((user) => ({ ...user, email: email}));
+  }
+
   const logOut = () => {
     localStorage.removeItem("jwtToken");
     setUser({});
   };
 
   return (
-    <AuthContext.Provider value={{ user, decodeJWT, logOut }}>
+    <AuthContext.Provider value={{ user, decodeJWT, loginWithPassword, logOut }}>
       {children}
     </AuthContext.Provider>
   );

@@ -16,7 +16,7 @@ const Signin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const { user, decodeJWT } = UserAuth();
+  const {user, decodeJWT, loginWithPassword} = UserAuth();
 
   useEffect(() => {
     /* global google*/
@@ -63,6 +63,7 @@ const Signin = () => {
 
     const user = loginData.find((user) => user.email === email && user.password === password);
     if (user) {
+      loginWithPassword(user);
       navigate("/homepage");
     } else {
       if (!email.trim()) {
@@ -71,11 +72,11 @@ const Signin = () => {
       if (!password.trim()) {
         toast.error("Password cannot be empty!");
       }
-      if (email.length > 10) {
-        toast.error("email must not be exceeded 15 characters!");
+      if (email.length > 30) {
+        toast.error("Email must not be exceeded 30 characters!");
       }
       if (password.length > 15) {
-        toast.error("Password must not be exceeded 10 characters!");
+        toast.error("Password must not be exceeded 15 characters!");
       } else {
         toast.error("Invalid Email or Password!");
       }
@@ -89,10 +90,10 @@ const Signin = () => {
         <form onSubmit={handleLogin}>
           <h3>Email:</h3>
           <input className="loginInput" type="email" value={email} onChange={(e) => setEmail(e.target.value)}/>
-          <br />
+          <br/>
           <h3>Password:</h3>
           <input className="loginInput" type="password" value={password} onChange={(e) => setPassword(e.target.value)}/>
-          <br />
+          <br/>
           <button className="loginButton" type="submit" onClick={handleLogin}>
             Login
           </button>

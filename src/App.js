@@ -30,7 +30,7 @@ function App() {
           <ToastContainer position="top-right" autoClose={2000} />
           <div style={{ flex: 1 }}>
             <Routes>
-              <Route path="/" element={<HomePage />} />
+              <Route path="/" element={<Signin/>} />
               <Route path="/signin" element={<Signin />} />
               <Route path="/homepage" element={<HomePage />} />
               <Route path="/topnews" element={<TopNew />} />
