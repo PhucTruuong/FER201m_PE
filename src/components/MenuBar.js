@@ -29,11 +29,17 @@ const MenuBar = () => {
 
           {user?.email ? (
             <>
+              <Button color="inherit" component={Link} to="/homepage">
+                Home
+              </Button>
               <Button color="inherit" component={Link} to="/dashboard">
                 Dashboard
               </Button>
               <Button color="inherit" component={Link} to="/profile">
                 Profile
+              </Button>
+              <Button color="inherit" component={Link} to="/topnews">
+                Top News
               </Button>
               <Button color="inherit" component={Button} onClick={handleLogOut}>
                 Log out

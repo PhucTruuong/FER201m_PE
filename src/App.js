@@ -34,17 +34,12 @@ function App() {
               <Route path="/signin" element={<Signin />} />
               <Route path="/homepage" element={<HomePage />} />
               <Route path="/topnews" element={<TopNew />} />
-              <Route
-                path="/dashboard"
-                element={
-                  <Protected>
-                    <DashBoard />
-                  </Protected>
-                }
-              />
-              <Route
-                path="/profile"
-                element={
+              <Route path="/dashboard" element={ 
+                <Protected>
+                  <DashBoard />
+                </Protected>
+              }/>
+              <Route path="/profile" element={
                   <Protected>
                     <Profile />
                   </Protected>

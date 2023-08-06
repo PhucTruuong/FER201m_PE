@@ -5,16 +5,15 @@ import { UserAuth } from "../context/AuthContext";
 import { useNavigate, useLocation } from "react-router-dom";
 import "../css/login.css";
 
-const URL =
-  "https://64b1f3c9062767bc4826b53c.mockapi.io/api/v1/signinInformation";
+const URL = "https://64b1f3c9062767bc4826b53c.mockapi.io/api/v1/signinInformation";
 
 const Signin = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const EM = location.state && location.state.EM;
 
-  // const [loginData, setLoginData] = useState([]);
-  const [userName, setUserName] = useState("");
+  const [loginData, setLoginData] = useState([]);
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const { user, decodeJWT } = UserAuth();
@@ -22,8 +21,7 @@ const Signin = () => {
   useEffect(() => {
     /* global google*/
     google.accounts.id.initialize({
-      client_id:
-        "649922704699-032oqaosppsos2qm66h73rmbgime1h7o.apps.googleusercontent.com",
+      client_id: "649922704699-032oqaosppsos2qm66h73rmbgime1h7o.apps.googleusercontent.com",
       callback: decodeJWT,
     });
     google.accounts.id.renderButton(
@@ -53,7 +51,7 @@ const Signin = () => {
     try {
       const res = await axios.get(URL);
       if (res.status === 200) {
-        // setLoginData(res.data);
+        setLoginData(res.data);
       }
     } catch (error) {
       console.error("Error fetching login data:", error);
@@ -63,25 +61,23 @@ const Signin = () => {
   const handleLogin = (e) => {
     e.preventDefault();
 
-    // const user = loginData.find(
-    //   (user) => user.userName === userName && user.password === password
-    // );
+    const user = loginData.find((user) => user.email === email && user.password === password);
     if (user) {
       navigate("/homepage");
     } else {
-      if (!userName.trim()) {
-        toast.error("Username cannot be empty!");
+      if (!email.trim()) {
+        toast.error("Email cannot be empty!");
       }
       if (!password.trim()) {
         toast.error("Password cannot be empty!");
       }
-      if (password.length > 10) {
-        toast.error("Username must not be exceeded 15 characters!");
+      if (email.length > 10) {
+        toast.error("email must not be exceeded 15 characters!");
       }
-      if (userName.length > 15) {
+      if (password.length > 15) {
         toast.error("Password must not be exceeded 10 characters!");
       } else {
-        toast.error("Invalid Username or Password!");
+        toast.error("Invalid Email or Password!");
       }
     }
   };
@@ -91,26 +87,18 @@ const Signin = () => {
       <div className="loginContainer">
         <h1>Login</h1>
         <form onSubmit={handleLogin}>
-          <h3>Username:</h3>
-          <input
-            className="loginInput"
-            type="text"
-            value={userName}
-            onChange={(e) => setUserName(e.target.value)}
-          />
+          <h3>Email:</h3>
+          <input className="loginInput" type="email" value={email} onChange={(e) => setEmail(e.target.value)}/>
           <br />
           <h3>Password:</h3>
-          <input
-            className="loginInput"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
+          <input className="loginInput" type="password" value={password} onChange={(e) => setPassword(e.target.value)}/>
           <br />
           <button className="loginButton" type="submit" onClick={handleLogin}>
             Login
           </button>
-          <div id="buttonDiv"></div>
+          <div style={{ marginLeft: '2.4rem'}}>
+            <div id="buttonDiv"></div>
+          </div>
         </form>
       </div>
     </div>

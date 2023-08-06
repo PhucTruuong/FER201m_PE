@@ -19,9 +19,13 @@
     padding: 0.8rem 0;
     font-size: 20px;
     border-radius: 10px;
+    margin-bottom: 1rem;
 }
 .loginInput{
     padding: 0.8rem 6.2rem 0.8rem 1rem;
     border-radius: 5px;
     font-size: 16px;
+}
+.buttonDiv{
+    margin-left: 1rem;
 }
